@@ -65,6 +65,7 @@ $btnKick.addEventListener('click', function () {
     console.log('Kick');
     enemy.changeHP(random(20));
     character.changeHP(random(20));
+    
 });
 
 $btnSpecial.addEventListener('click', function () {
