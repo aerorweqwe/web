@@ -84,20 +84,39 @@ function addLog(message) {
     $logs.prepend(logEntry);
 }
 
+function clickCounter(limit) {
+    let count = 0;
+    return function (button) {
+        if (count < limit) {
+            count++;
+            console.log(`Button ${button} clicked ${count} times. Remaining: ${limit - count}`);
+            return true;
+        } else {
+            console.log(`Button ${button} click limit reached.`);
+            return false;
+        }
+    };
+}
+
+const kickCounter = clickCounter(6);
+const specialCounter = clickCounter(6);
+
 $btnKick.addEventListener('click', function () {
-    console.log('Kick');
-    const damageToEnemy = random(20);
-    const damageToCharacter = random(20);
-    enemy.changeHP(damageToEnemy, character);
-    character.changeHP(damageToCharacter, enemy);
+    if (kickCounter('Kick')) {
+        const damageToEnemy = random(20);
+        const damageToCharacter = random(20);
+        enemy.changeHP(damageToEnemy, character);
+        character.changeHP(damageToCharacter, enemy);
+    }
 });
 
 $btnSpecial.addEventListener('click', function () {
-    console.log('Special Attack');
-    const damageToEnemy = random(30);
-    const damageToCharacter = random(30);
-    enemy.changeHP(damageToEnemy, character);
-    character.changeHP(damageToCharacter, enemy);
+    if (specialCounter('Special')) {
+        const damageToEnemy = random(30);
+        const damageToCharacter = random(30);
+        enemy.changeHP(damageToEnemy, character);
+        character.changeHP(damageToCharacter, enemy);
+    }
 });
 
 init();
