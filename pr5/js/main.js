@@ -8,28 +8,24 @@ document.addEventListener('DOMContentLoaded', () => {
   const buttonOut = document.querySelector('.button-out');
   const userName = document.querySelector('.user-name');
 
-  if (buttonAuth) {
-    buttonAuth.addEventListener('click', () => {
-        console.log('Auth button clicked');
-    });
-}
   const openModalAuth = () => {
     modalAuth.style.display = 'flex';
+    document.body.style.overflow = 'hidden'; 
+   
   };
 
   const closeModalAuth = () => {
     modalAuth.style.display = 'none';
+    document.body.style.overflow = ''; 
   };
 
- const login = (user) => {
-  if (userName) {
+  const login = (user) => {
     userName.textContent = user;
+    buttonAuth.style.display = 'none';
+    buttonOut.style.display = 'block';
     userName.style.display = 'block';
-  }
-  if (buttonAuth) buttonAuth.style.display = 'none';
-  if (buttonOut) buttonOut.style.display = 'block';
-  closeModalAuth();
-};
+    closeModalAuth();
+  };
 
   const logout = () => {
     userName.textContent = '';
@@ -39,8 +35,35 @@ document.addEventListener('DOMContentLoaded', () => {
     localStorage.removeItem('user');
   };
 
+  const validateFields = () => {
+    let isValid = true;
+
+    if (!loginInput.value.trim()) {
+      loginInput.style.borderColor = 'red';
+      isValid = false;
+    } else {
+      loginInput.style.borderColor = 'black';
+    }
+
+    if (!passwordInput.value.trim()) {
+      passwordInput.style.borderColor = 'red';
+      isValid = false;
+    } else {
+      passwordInput.style.borderColor = 'black';
+    }
+
+    return isValid;
+  };
+
   buttonAuth.addEventListener('click', openModalAuth);
+
   closeAuth.addEventListener('click', closeModalAuth);
+
+  modalAuth.addEventListener('click', (event) => {
+    if (event.target === modalAuth) {
+      closeModalAuth();
+    }
+  });
 
   buttonOut.addEventListener('click', () => {
     logout();
@@ -48,18 +71,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
   loginForm.addEventListener('submit', (event) => {
     event.preventDefault();
-    const loginValue = loginInput.value.trim();
-    const passwordValue = passwordInput.value.trim();
 
-    if (loginValue && passwordValue) {
-      localStorage.setItem('user', loginValue); // Зберігаємо ім'я користувача в localStorage
+    if (validateFields()) {
+      const loginValue = loginInput.value.trim();
+      const passwordValue = passwordInput.value.trim();
+
+      localStorage.setItem('user', loginValue);
       login(loginValue);
     } else {
       alert('Будь ласка, заповніть всі поля!');
     }
   });
 
-  // Автоматичне відображення користувача, якщо він уже авторизований
   const savedUser = localStorage.getItem('user');
   if (savedUser) {
     login(savedUser);
